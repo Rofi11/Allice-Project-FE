@@ -1,0 +1,36 @@
+{
+  "users": [
+    {
+      "fullName": "Muhammad Rofi",
+      "username": "Rocky",
+      "email": "rofimuhamad0381@gmail.com",
+      "password": "password",
+      "role": "user",
+      "id": 1
+    },
+    {
+      "fullName": "",
+      "username": "",
+      "email": "",
+      "password": "",
+      "role": "user",
+      "id": 2
+    },
+    {
+      "fullName": "Bimo pp",
+      "username": "bimo",
+      "email": "bimo@gmail.com",
+      "password": "sikatsaja",
+      "role": "user",
+      "id": 3
+    },
+    {
+      "fullName": "ilyas fadel",
+      "username": "ilyas",
+      "email": "ilyas@gmail.com",
+      "password": "ilyasf",
+      "role": "user",
+      "id": 4
+    }
+  ]
+}
