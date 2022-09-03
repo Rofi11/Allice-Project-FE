@@ -9,26 +9,26 @@
       "id": 1
     },
     {
-      "fullName": "",
-      "username": "",
-      "email": "",
-      "password": "",
-      "role": "user",
-      "id": 2
-    },
-    {
       "fullName": "Bimo pp",
       "username": "bimo",
       "email": "bimo@gmail.com",
       "password": "sikatsaja",
       "role": "user",
-      "id": 3
+      "id": 2
     },
     {
       "fullName": "ilyas fadel",
       "username": "ilyas",
       "email": "ilyas@gmail.com",
       "password": "ilyasf",
+      "role": "user",
+      "id": 3
+    },
+    {
+      "fullName": "Jean",
+      "username": "Jean",
+      "email": "jean@gmail.com",
+      "password": "password",
       "role": "user",
       "id": 4
     }

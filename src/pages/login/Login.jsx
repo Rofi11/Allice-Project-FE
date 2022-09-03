@@ -1,35 +1,32 @@
-import "./login.css"
+import "./Login.css"
 import React, { Component } from 'react';
 import "bootstrap/dist/css/bootstrap.css"
-import {Link} from 'react-router-dom'
+import {Link, Navigate} from 'react-router-dom'
+import {connect} from 'react-redux' 
+import {loginUser} from '../../redux/actions/userAct'
 
 class Login extends Component {
-    state={
-        biodata: [],
-        inputUsername: "",
-        inputPassword: ""
+    state = {
+        username: "",
+        password: "",
+        errMsg:""
     }
 
-    // button login
-    fnSignin(){
-        alert("tombol sign-in")
-    }
-    //handler inputan username
-    inputHandlerUsername = (event) =>{
-        this.setState({
-            inputUsername: event.target.value
-        })
+    //handler inputan
+    inputHandler = (event) => {
+        const value = event.target.value
+        const name = event.target.name
+
+        this.setState({[name] : value})
     }
 
-    //handler inputan username
-    inputHandlerPassword= (event) =>{
-        this.setState({
-            inputPassword: event.target.value
-        })
-    }
 
 
     render(){
+        // setelah login akan masuk ke home page dan tidak bisa kembali ke login page
+        if (this.props.userGlobal.id){
+            return <Navigate to="/"/>
+        }
         return(
             <div className="container-utama d-flex">
                 {/* bagian gambar */}
@@ -47,15 +44,20 @@ class Login extends Component {
                     <div className="form-login d-flex flex-column">
                         <div className="name">Sign in to Allice</div>
                         <div className="form-username d-flex flex-column">
-                            <label for="username">Username or Email Address</label>
-                            <input onChange={this.inputHandlerUsername} type="text" id="username" placeholder="Username or Email Address" />
+                            {/* ternary option utk ketika salah pass / salah username */}
+                            {
+                                this.props.userGlobal.errMsg ? 
+                                <div className="alert alert-danger">{this.props.userGlobal.errMsg}</div> : null
+                            }
+                            <label htmlFor="username">Username</label>
+                            <input name="username" onChange={this.inputHandler} type="text" id="username" placeholder="Username or Email Address" />
                         </div>
                             <div className="form-password d-flex flex-column">
-                            <label for="password">Password</label>
-                            <input onChange={this.inputHandlerPassword} type="password" id="password"placeholder="Password"/>
+                            <label htmlFor="password">Password</label>
+                            <input name="password" onChange={this.inputHandler} type="password" id="password"placeholder="Password"/>
                         </div>
 
-                        <input type="button" value="Sign in" onClick={this.fnSignin} />
+                        <input type="button" value="Sign in" onClick={() => this.props.loginUser(this.state)} />
 
                         <div className="form-last d-flex flex-row justify-content-between">
                             <a href="#">Forgot Password?</a>
@@ -68,4 +70,16 @@ class Login extends Component {
     }
 }
 
-export default Login
+//ambil global state
+const mapStateToProps = (state) => {
+    return {
+        userGlobal : state.userReducer
+    }
+}
+
+// action object global
+const mapDispatchToProps = {
+    loginUser
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Login)

@@ -5,6 +5,7 @@ import Axios  from "axios";
 import {API_URL} from '../../constants/API'
 import {createAccountGlobal} from '../../redux/actions/userAct'
 import {connect} from 'react-redux'
+import {Link, Navigate} from 'react-router-dom'
 
 
 class SignUp extends Component {
@@ -44,6 +45,10 @@ class SignUp extends Component {
     }
 
     render(){
+        // ksetika sudah mendaftar akan langsung di arahkan ke hom page
+        if(this.props.userGlobal.id){
+            return <Navigate to="/"/>
+        }
         return(
             <div className="container-utama d-flex">
                 {/* bagian gambar */}
@@ -83,13 +88,16 @@ class SignUp extends Component {
                         <input type="button" value="Create Account" onClick={() => this.props.createAccountGlobal(this.state)} />
                     </div>
                 </div>
+                <p className="back-login">Already Member? <Link to="/login">Sign in</Link></p>
             </div>
         )
     }
 }
 
-const mapStateToProps = () => {
-    return {}
+const mapStateToProps = (state) => {
+    return {
+        userGlobal : state.userReducer
+    }
 }
 
 const mapDispatchToProps = {
