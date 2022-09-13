@@ -1,0 +1,107 @@
+.container-card {
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    width: 100%;
+    height: max-content;
+    margin-bottom: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-sizing: border-box;
+}
+
+.container-card .image img {
+    width: 493px;
+    height: 588px;
+    object-fit: cover;
+    margin-bottom: 8px;
+}
+
+.container-inputan {
+    /* border: 1px solid green; */
+    margin-top: -5px;
+    margin-bottom: 5px;
+}
+
+.inputan {
+    border: none;
+    width: 80%;
+    outline: none;
+    padding: 5px;
+    margin-right: 5px;
+    background-color: inherit;
+}
+
+button {
+    /* background-color: red; */
+    border: none;
+    background: transparent;
+    outline: none;
+    padding: 5px 8px;
+    color: blue;
+}
+
+.info-post {
+    /* border: 1px solid blue; */
+    height: 56px;
+    width: 490px;
+    background-color: #fff;
+    padding: 10px;
+}
+
+.info-post .ellipsis img {
+    width: 24px;
+    height: 24px;
+}
+
+.icon-card {
+    height: 46px;
+    /* border: 1px solid red; */
+}
+
+
+.icon-card-heart img,
+.icon-card-chat img,
+.icon-card-send img {
+    width: 24px;
+    height: 24px;
+    /* border: 1px solid black; */
+    margin-right: 20px;
+    cursor: pointer;
+}
+
+.info-comment {
+    height: 130px;
+}
+
+.info-comment div {
+    margin-left: 7px;
+}
+
+.container-inputan img {
+    width: 24px;
+    height: 24px;
+    margin: 0 5px;
+    cursor: pointer;
+}
+
+.info-post-gambar {
+    /* border: 1px solid black; */
+    width: 42px;
+    height: 42px;
+}
+
+.info-post-gambar img {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+}
+
+.info-comment-jam {
+    font-size: 10px;
+    color: rgb(142, 142, 142);
+    cursor: pointer;
+}
+
+.info-comment-komentar {
+    color: rgb(142, 142, 142);
+    font-size: 14px;
+}

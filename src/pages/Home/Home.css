@@ -1,0 +1,158 @@
+.container-gambar {
+    height: 80vh;
+    /* border: 1px solid red; */
+    background-image: linear-gradient(to right, rgb(64, 26, 233), rgb(160, 144, 234));
+}
+
+.container-gambar .tulisan {
+    position: absolute;
+    top: 300px;
+    left: 0;
+    right: 0;
+    text-align: center;
+    font-style: italic;
+    font-size: 80px;
+    color: white;
+    font-weight: 500;
+    letter-spacing: 6px;
+}
+
+.tulisan h1 {
+    margin-bottom: 60px;
+}
+
+.tulisan h3:hover {
+    /* color: red; */
+    transition: transform 500ms ease-in-out;
+    transform: translateY(-10px);
+}
+
+.container-story {
+    box-sizing: border-box;
+    overflow-y: hidden;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    height: 12vh;
+    background-color: #fff;
+    border-radius: 8px;
+    overflow: scroll;
+}
+
+.box-story {
+    width: 70px;
+    height: 70px;
+    /* border: 1px solid red; */
+    margin: 6px;
+}
+
+.containerUtama {
+    /* border: 1px solid red; */
+    width: 891px;
+    /* height: 9000px; */
+    height: max-content;
+    position: relative;
+    top: 100px;
+    left: 350px;
+}
+
+.box-info {
+    /* border: 1px solid black; */
+    width: 370px;
+    height: 350px;
+}
+
+.info-profile .image {
+    /* border: 1px solid red; */
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    overflow: hidden;
+    margin-right: 15px;
+}
+
+.info-profile .image img {
+    width: 56px;
+    height: 56px;
+
+}
+
+.info-profile-name {
+    font-size: 14px;
+}
+
+.info-profile-alihkan {
+    font-size: 12px;
+    color: rgb(0, 149, 246);
+}
+
+.info-sekitar-saran {
+    color: rgb(142, 142, 142);
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.info-sekitar-lihat {
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.info-sekitar-footer {
+    margin-top: 10px;
+    width: 320px;
+    height: 120px;
+    /* border: 1px solid black; */
+}
+
+.info-sekitar-footer span {
+    font-size: 12px;
+    font-weight: 400;
+    margin-right: 20px;
+    color: rgb(199, 199, 199);
+}
+
+.info-sekitar-footer span:hover {
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+.info-sekitar-footer .footer {
+    color: rgb(199, 199, 199);
+    font-size: 12px;
+    font-weight: 400;
+}
+
+.container-box-add {
+    position: fixed;
+    background-color: black;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    opacity: 0.7;
+    z-index: 1;
+}
+
+.box-add-home {
+    position: absolute;
+    top: 120px;
+    left: 560px;
+    width: 500px;
+    height: 520px;
+    background-color: #fff;
+    z-index: 3;
+    border-radius: 10px;
+}
+
+.box-add-home-title {
+    margin: 10px 0 20px 0;
+}
+
+.box-add-home-postingan {
+    width: 100%;
+    height: 100%;
+    border-top: 1px solid rgba(0, 0, 0, 0.2);
+}
+
+.box-add-home-postingan div:first-child {
+
+    margin-bottom: 50px;
+}

@@ -2,30 +2,32 @@
 import Axios  from "axios";
 import {API_URL} from '../../constants/API'
 
-export const createAccountGlobal = ({fullName, username , email ,password}) => {
+export const createAccountGlobal = ({fullName, username , email ,password, password2}) => {
     return (dispatch) => {
-        Axios.post(`${API_URL}/users` , {
-            fullName,
-            username,
-            email,
-            password,
-            role : "user"
-        })
-        .then((result) => {
-            //hapus pass agar tidak bisa diliha/ diakses org lain
-            delete result.data.password
-            //harus disimpan juga dalam local storage ketika ada yg daftar
-            localStorage.setItem("UserDataAllice", JSON.stringify(result.data))
-            // yg dikirim sudah tidak memiliki password
-            dispatch({
-                type: "USER_LOGIN",
-                payload : result.data
+        if(password == password2){
+            Axios.post(`${API_URL}/users` , {
+                fullName,
+                username,
+                email,
+                password,
+                role : "user"
             })
-            alert("Berhasil mendaftarkan user")
-        })
-        .catch((err) => {
-            alert(err)
-        })
+            .then((result) => {
+                //hapus pass agar tidak bisa diliha/ diakses org lain
+                delete result.data.password
+                // yg dikirim sudah tidak memiliki password
+                dispatch({
+                    type: "USER_LOGIN",
+                    payload : result.data
+                })
+                alert("Berhasil mendaftarkan user")
+            })
+            .catch((err) => {
+                alert(err)
+            })
+        } else {
+            alert("password tidak singkron")
+        }
     }
 }
 
@@ -102,5 +104,16 @@ export const userKeepLogin = (userData) => {
 export const checkStorage = () => {
     return {
         type: "CHECK_STORAGE",
+    }
+}
+
+export const btnHandlerAdd = () => {
+    return {
+        type: "CHECK_IS_ADD"
+    }
+}
+export const btnHandlerClose = () => {
+    return {
+        type: "CHECK_IS_CLOSE"
     }
 }

@@ -31,6 +31,14 @@
       "password": "password",
       "role": "user",
       "id": 4
+    },
+    {
+      "fullName": "rofi",
+      "username": "rofi",
+      "email": "rofi@gmail.com",
+      "password": "password",
+      "role": "user",
+      "id": 5
     }
   ]
 }

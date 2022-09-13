@@ -10,15 +10,15 @@ import {Link, Navigate} from 'react-router-dom'
 
 class SignUp extends Component {
     state={
-    username: "",
-    fullName: "",
-    email: "",
-    password:"",
-    password2:""
+        username: "",
+        fullName: "",
+        email: "",
+        password:"",
+        password2:"",
     }
 
     //handler inputan username
-    inputHandler = (event) =>{
+    inputHandler = (event) =>{ //dicoba buat pengkondisian disini
         const value = event.target.value
         const name = event.target.name
 
@@ -45,9 +45,9 @@ class SignUp extends Component {
     }
 
     render(){
-        // ksetika sudah mendaftar akan langsung di arahkan ke hom page
+        // ketika sudah mendaftar akan langsung di arahkan ke hom page
         if(this.props.userGlobal.id){
-            return <Navigate to="/"/>
+            return <Navigate to="/home"/>
         }
         return(
             <div className="container-utama d-flex">
@@ -75,12 +75,12 @@ class SignUp extends Component {
                             <input name="email" onChange={this.inputHandler} type="Email" id="Email" placeholder="Email Address" />
                         </div>
                             <div className="form-password d-flex flex-column">
-                            <label htmlFor="password">Password</label>
-                            <input name="password" onChange={this.inputHandler} type="password" id="password"placeholder="Password"/>
-                            <label htmlFor="re-password">Re-Password</label>
-                            <input name="password2" onChange={this.inputHandler} type="password" id="re-password"placeholder="Password"/>
-                        </div>
-
+                                <label htmlFor="password">Password</label>
+                                <input name="password" onChange={this.inputHandler} type="password" id="password"placeholder="Password"/>
+                                <label htmlFor="re-password">Re-Password</label>
+                                <input name="password2" onChange={this.inputHandler} type="password" id="re-password"placeholder="Password"/>
+                            </div>
+                                    
                         <div className="checkBox d-flex flex-row ">
                             <input type="checkbox" name="confirm" id="confirm" />
                             <label htmlFor="confirm">Creating an account means you’re okay with our <a href="#">Terms of Service, Privacy Policy</a>, and our default <a href="#">Notification Settings.</a> </label>
@@ -88,7 +88,7 @@ class SignUp extends Component {
                         <input type="button" value="Create Account" onClick={() => this.props.createAccountGlobal(this.state)} />
                     </div>
                 </div>
-                <p className="back-login">Already Member? <Link to="/login">Sign in</Link></p>
+                <p className="back-login">Already Member? <Link to="/">Sign in</Link></p>
             </div>
         )
     }

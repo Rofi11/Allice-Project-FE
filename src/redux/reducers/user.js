@@ -6,7 +6,8 @@ const init_state = {
     role: "",
     id: 0,
     errMsg: "",
-    StorageisChecked : false
+    StorageisChecked : false,
+    isAdd : false
 }
 
 export default (state = init_state, action) => {
@@ -19,6 +20,10 @@ export default (state = init_state, action) => {
             return {...init_state, storageIsChecked: true}
         case "CHECK_STORAGE":   
             return { ...state, storageIsChecked: true}
+        case "CHECK_IS_ADD":
+            return {...state, storageIsChecked: true, isAdd : true}
+        case "CHECK_IS_CLOSE" :
+            return {...state, storageIsChecked: true, isAdd : false}
         default:
             return state
     }

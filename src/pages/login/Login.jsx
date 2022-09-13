@@ -20,12 +20,10 @@ class Login extends Component {
         this.setState({[name] : value})
     }
 
-
-
     render(){
         // setelah login akan masuk ke home page dan tidak bisa kembali ke login page
         if (this.props.userGlobal.id){
-            return <Navigate to="/"/>
+            return <Navigate to="/home"/>
         }
         return(
             <div className="container-utama d-flex">
@@ -34,8 +32,7 @@ class Login extends Component {
                     <div className="allice">
                         <div className="name-allice">Allice</div>
                         <div className="enjoy">Allice Help you Connect and Share with the People in your life</div>
-                    </div>
-                    
+                    </div>            
                 </div>
 
                 {/* bagian-form-login  */}

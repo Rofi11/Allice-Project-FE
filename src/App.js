@@ -5,6 +5,8 @@ import Login from './pages/Login/Login'
 import SignUp from './pages/SignUp/SignUp'
 import Home from './pages/Home/Home';
 import MyNavBar from './components/MyNavbar';
+import Profile from './pages/Profile/Profile';
+import EditProfile from './pages/EditProfile/EditProfile';
 //redux
 import {connect} from 'react-redux'
 import {userKeepLogin, checkStorage } from './redux/actions/userAct'
@@ -21,7 +23,7 @@ class App extends Component {
     if(userLocalStorage){
       const userData = JSON.parse(userLocalStorage)
       this.props.userKeepLogin(userData)
-      // console.log(userData);
+      console.log(userData);
     } else {
       // ketika data nya null ini kunci agar masuk ke renderan
       this.props.checkStorage()
@@ -33,9 +35,11 @@ class App extends Component {
     if (this.props.userGlobal.storageIsChecked) {
       return (
         <Routes>
-          <Route path='/' element={<Home/>}/>
-          <Route path='/login' element={<Login/>}/>
-          <Route path='/SignUp' element={<SignUp/>}/>
+          <Route path='/' element={<Login/>}/>
+          <Route path='/home' element={<Home/>}/>
+          <Route path='/signUp' element={<SignUp/>}/>
+          <Route path='/profile' element={<Profile/>}/>
+          <Route path="/editprofile" element={<EditProfile/>}/>
         </Routes>
       );
     }

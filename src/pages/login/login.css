@@ -1,4 +1,4 @@
-body {
+.container-utama {
     background-image: linear-gradient(to right, rgb(64, 26, 233), rgb(160, 144, 234));
 }
 
@@ -55,6 +55,7 @@ body {
 .allice {
     color: #ffff;
 }
+
 .allice .enjoy {
     font-size: 15px;
 }
