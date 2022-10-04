@@ -39,6 +39,9 @@ button {
     color: blue;
 }
 
+.disable {
+    color: lightblue;
+}
 .info-post {
     /* border: 1px solid blue; */
     height: 56px;
@@ -104,4 +107,9 @@ button {
 .info-comment-komentar {
     color: rgb(142, 142, 142);
     font-size: 14px;
+    cursor: pointer;
+    }
+    
+    .info-comment div span {
+        font-weight: 700;
 }

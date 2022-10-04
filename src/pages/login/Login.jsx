@@ -4,12 +4,31 @@ import "bootstrap/dist/css/bootstrap.css"
 import {Link, Navigate} from 'react-router-dom'
 import {connect} from 'react-redux' 
 import {loginUser} from '../../redux/actions/userAct'
+import { Icon } from 'react-icons-kit'
+import {view_off} from 'react-icons-kit/ikons/view_off'
+import {view} from 'react-icons-kit/ikons/view'
 
 class Login extends Component {
     state = {
-        username: "",
+        user_email: "",
         password: "",
-        errMsg:""
+        errMsg:"",
+        type : "password",
+        icon : view_off
+    }
+
+    handleToggle = () => {
+        if(this.state.type === "password"){
+            this.setState({
+                type : "text",
+                icon : view
+            })
+        } else {
+            this.setState({
+                type : "password",
+                icon : view_off
+            })
+        }
     }
 
     //handler inputan
@@ -22,7 +41,7 @@ class Login extends Component {
 
     render(){
         // setelah login akan masuk ke home page dan tidak bisa kembali ke login page
-        if (this.props.userGlobal.id){
+        if (this.props.userGlobal.idusers){
             return <Navigate to="/home"/>
         }
         return(
@@ -47,17 +66,27 @@ class Login extends Component {
                                 <div className="alert alert-danger">{this.props.userGlobal.errMsg}</div> : null
                             }
                             <label htmlFor="username">Username</label>
-                            <input name="username" onChange={this.inputHandler} type="text" id="username" placeholder="Username or Email Address" />
+                            <input name="user_email" className="input" onChange={this.inputHandler} type="text" id="user_email" placeholder="Username or Email Address" />
                         </div>
-                            <div className="form-password d-flex flex-column">
+                            <div className="form-passwordxx d-flex flex-column">
                             <label htmlFor="password">Password</label>
-                            <input name="password" onChange={this.inputHandler} type="password" id="password"placeholder="Password"/>
+                            <div className="form-passwordxx-toggle">
+                                <input 
+                                name="password" 
+                                onChange={this.inputHandler} 
+                                type={this.state.type} 
+                                id="password" 
+                                placeholder="Password"
+                                className="input"
+                                />
+                                <span onClick={this.handleToggle}><Icon icon={this.state.icon} size={25}/></span>
+                            </div>
                         </div>
 
                         <input type="button" value="Sign in" onClick={() => this.props.loginUser(this.state)} />
 
                         <div className="form-last d-flex flex-row justify-content-between">
-                            <a href="#">Forgot Password?</a>
+                            <Link to="/forgot-password">Forgot Password?</Link>
                             <Link to="/SignUp">Sign Up</Link>
                         </div>
                     </div>

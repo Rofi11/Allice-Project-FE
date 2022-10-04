@@ -1,10 +1,17 @@
 import React from 'react';
 import "../assets/styles/PostCard.css"
+import { useNavigate } from 'react-router-dom';
 
-function PostCard () {
-    return (
+const PostCard = (props) => {
+    const navigate = useNavigate()
+    //buat btn utk 
+    const handleClick = (id) => {
+        navigate(`/profile/${id}`)
+    }
+
+    return(
         <div className='post-card'>
-            <img src="http://asset-a.grid.id/crop/0x0:0x0/780x800/photo/bobofoto/original/17235_jenis-jenis-hutan-berdasarkan-bentang-alamnya.jpg" alt="" />
+            <img src={props.PostCardData.PostImage} onClick={() => {handleClick(props.PostCardData.id)}} alt="" />
         </div>
     )
 }

@@ -87,37 +87,19 @@
     margin-bottom: 10px;
 }
 
-.form-username .input {
+.form-password {
+    margin-bottom: 25px;
     outline: none;
-}
-
-.form-passwordxx {
-    margin-bottom: 15px;
-}
-
-.form-passwordxx-toggle .input {
-    /* border: 1px solid red; */
-    padding-right: 227px;
     border: none;
-    outline: none;
 }
 
-/* .form-passwordxx span {
-    border: 1px solid black;
-    padding-bottom: -10px;
-    vertical-align: top;
-} */
 
-.form-passwordxx-toggle {
-    border: 1px solid rgba(0, 0, 0, 0.4);
-}
-
-.form-passwordxx label {
+.form-password label {
     font-size: 16px;
     font-weight: 700;
     margin-bottom: 10px;
-}
 
+}
 
 input[type="button"] {
     /* width: 150px; */

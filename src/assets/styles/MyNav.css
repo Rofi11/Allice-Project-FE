@@ -1,6 +1,6 @@
 .customer {
     position: relative;
-    border: 1px solid black;
+    /* border: 1px solid black; */
     margin-top: 10px;
     background: transparent;
     width: 30px;
@@ -16,6 +16,7 @@
     top: 0;
     width: 30px;
     height: 30px;
+    border-radius: 50%;
 }
 
 .icon img {
@@ -24,10 +25,11 @@
     cursor: pointer;
 }
 
-.icon img:active {
+/* .icon img:active {
     background-color: black;
 }
 
+*/
 .posi {
     margin-top: -1px;
 }
@@ -53,4 +55,70 @@
 
 .search {
     margin: 5px 120px 5px 0;
+}
+/* .container-box-add {
+    position: fixed;
+    background-color: black;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    opacity: 0.7;
+    z-index: 1;
+} */
+
+.box-add-home {
+    height: 520px;
+    /* background-color: #fff; */
+    z-index: 3;
+    border-radius: 10px;
+    /* border: 1px solid blue; */
+    margin-top: -10px;
+}
+
+.box-add-home-title {
+    margin: 10px 0 20px 0;
+    /* border: 1px solid black; */
+    padding-bottom: 5px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+}
+
+.box-add-home-postingan {
+    width: 100%;
+    height: 100%;
+    margin-top: -10px;
+    /* border-top: 1px solid rgba(0, 0, 0, 0.2); */
+    border-right: 1px solid rgba(0, 0, 0, 0.2);
+    /* border: 1px solid red; */
+}
+
+.box-add-home-postingan div:first-child {
+    margin-bottom: 50px;
+}
+
+.backgroundxx {
+    margin-left: -100px;
+    /* border: 1px solid red; */
+    width: 750px;
+    background-color: #fff;
+}
+
+.box-add-home-caption-account-profile img {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+}
+
+.box-add-home-caption {
+    /* border: 1px solid green; */
+    margin-top: -20px;
+    padding-top: 8px;
+}
+
+.box-add-home-caption input[type="text"] {
+    width: 100%;
+    padding-bottom: 50vh;
+    /* height: 50vh; */
+    border: none;
+    outline: none;
 }

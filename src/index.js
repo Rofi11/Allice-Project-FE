@@ -8,12 +8,7 @@ import {BrowserRouter} from 'react-router-dom'
 
 //redux
 import {Provider} from 'react-redux'
-import {createStore, applyMiddleware} from 'redux'
-import ReduxThunk from 'redux-thunk'
-import rootReducer from './redux/reducers/index' // ==> akan otomatis ambil ke index.js di folder reducers
-import thunk from 'redux-thunk';
-
-const store = createStore(rootReducer, applyMiddleware(thunk))
+import store from './redux/reducers';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(

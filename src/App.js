@@ -1,15 +1,16 @@
-import logo from './logo.svg';
 import './App.css';
 import {Routes, Route} from 'react-router-dom'
 import Login from './pages/Login/Login'
 import SignUp from './pages/SignUp/SignUp'
 import Home from './pages/Home/Home';
-import MyNavBar from './components/MyNavbar';
 import Profile from './pages/Profile/Profile';
 import EditProfile from './pages/EditProfile/EditProfile';
+import Forgot from './pages/ForgotPassword/Forgot';
+import KomentarHomeDetail from './components/KomentarHomeDetail';
 //redux
 import {connect} from 'react-redux'
 import {userKeepLogin, checkStorage } from './redux/actions/userAct'
+// import { getPostData } from './redux/actions/postAct';
 import { Component } from 'react';
 
 
@@ -23,7 +24,8 @@ class App extends Component {
     if(userLocalStorage){
       const userData = JSON.parse(userLocalStorage)
       this.props.userKeepLogin(userData)
-      console.log(userData);
+      // this.props.getPostData(userData.id)
+      // console.log(userData);
     } else {
       // ketika data nya null ini kunci agar masuk ke renderan
       this.props.checkStorage()
@@ -37,9 +39,12 @@ class App extends Component {
         <Routes>
           <Route path='/' element={<Login/>}/>
           <Route path='/home' element={<Home/>}/>
+          <Route path='/komentarhomedetail/:id' element={<KomentarHomeDetail/>}/>
           <Route path='/signUp' element={<SignUp/>}/>
           <Route path='/profile' element={<Profile/>}/>
+          <Route path='/profile/:id' element={<Profile/>}/>
           <Route path="/editprofile" element={<EditProfile/>}/>
+          <Route path="/forgot-password" element={<Forgot/>}/>
         </Routes>
       );
     }
@@ -62,6 +67,7 @@ const mapStateToProps = (state) => {
 //manngil action object
 const mapDispatchToProps = {
   userKeepLogin,
-  checkStorage 
+  checkStorage ,
+  // getPostData
 }
 export default connect(mapStateToProps,mapDispatchToProps)(App);

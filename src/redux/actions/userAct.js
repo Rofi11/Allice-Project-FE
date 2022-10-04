@@ -1,41 +1,54 @@
 //action object  global
 import Axios  from "axios";
 import {API_URL} from '../../constants/API'
+import customer from "../../assets/image/iconsAllice/customer.png"
+import axios from "axios";
 
-export const createAccountGlobal = ({fullName, username , email ,password, password2}) => {
-    return (dispatch) => {
-        if(password == password2){
-            Axios.post(`${API_URL}/users` , {
-                fullName,
-                username,
-                email,
-                password,
-                role : "user"
-            })
-            .then((result) => {
-                //hapus pass agar tidak bisa diliha/ diakses org lain
-                delete result.data.password
-                // yg dikirim sudah tidak memiliki password
-                dispatch({
-                    type: "USER_LOGIN",
-                    payload : result.data
+export const createAccountGlobal = (values, setSubmitting) => {
+    return async function (dispatch) {
+        try {
+            if(values.password == values.password2){
+                await Axios.post(`${API_URL}/users/register` , {
+                    fullname : values.fullname,
+                    username : values.username,
+                    email : values.email,
+                    password : values.password,
+                    role : "user",
+                    fotoProfile: {customer},
+                    bio : "",
                 })
-                alert("Berhasil mendaftarkan user")
-            })
-            .catch((err) => {
-                alert(err)
-            })
-        } else {
-            alert("password tidak singkron")
+                .then((result) => {
+                    console.log(result.data);
+                    //hapus pass agar tidak bisa diliha/ diakses org lain
+                    delete result.data.password
+                    // yg dikirim sudah tidak memiliki password
+                    dispatch({
+                        type: "USER_LOGIN",
+                        payload : result.data
+                    })
+                    alert("Berhasil mendaftarkan user")
+                })
+                .catch((err) => {
+                    alert(err)
+                })
+            } else {
+                alert("password tidak singkron")
+            }
+
+            setSubmitting(false)
+        } catch (error){
+            alert(error)
+            setSubmitting(false)
         }
     }
 }
 
-export const loginUser = ({username, password}) => {
+export const loginUser = ({user_email, password}) => {
     return (dispatch) => {
-        Axios.get(`${API_URL}/users`, {
+        Axios.get(`${API_URL}/users/get`, {
             params:{
-                username:username,
+                user_email:user_email,
+                password : password
             }
         })
         .then((result) => {
@@ -44,6 +57,7 @@ export const loginUser = ({username, password}) => {
                 if(password === result.data[0].password){
                     //delete pass dulu, agar tidak tersimpan di localstorage maupun di global state
                     delete result.data[0].password
+                    // console.log(result.data[0]);
 
                     localStorage.setItem("UserDataAllice", JSON.stringify(result.data[0]))
                     dispatch({
@@ -79,13 +93,15 @@ export const logoutUser = () => {
 }
 
 export const userKeepLogin = (userData) => {
+    // console.log(userData);
     return (dispatch) => {
-        Axios.get(`${API_URL}/users`, {
+        Axios.get(`${API_URL}/users/userKeepLogin`, {
             params: {
-                id : userData.id
+                idusers : userData.idusers
             }
         })
         .then((result) => {
+            // console.log(result.data);
             // agar data yg di ambil selalu terbaru
             delete result.data[0].password
             localStorage.setItem("UserDataAllice" , JSON.stringify(result.data[0]))
@@ -96,7 +112,7 @@ export const userKeepLogin = (userData) => {
             })
         })
         .catch((err) => {
-            alert(err)
+            console.log(err);
         })
     }
 }
@@ -107,13 +123,30 @@ export const checkStorage = () => {
     }
 }
 
-export const btnHandlerAdd = () => {
-    return {
-        type: "CHECK_IS_ADD"
-    }
-}
-export const btnHandlerClose = () => {
-    return {
-        type: "CHECK_IS_CLOSE"
+//utk forgot
+export const cekEmail = (values, setSubmitting) => {
+    return async function (dispatch) {
+        try {
+        await Axios.get(`${API_URL}/users`, {
+            params:{
+                email : values.email,
+            }
+        })
+        .then((result) => {
+            console.log(result.data[0]);
+            dispatch({
+                type : "USER_LOGIN",
+                payload :result.data[0]
+            })
+        })
+        .catch((err) => {
+            alert(err)
+        })
+
+            setSubmitting(false)
+        } catch (error){
+            alert(error)
+            setSubmitting(false)
+        }
     }
 }
