@@ -11,9 +11,36 @@ import { useFormik } from "formik";
 import * as Yup from 'yup'
 import YupPassword from "yup-password";
 import {useDispatch, useSelector} from "react-redux"
+import { Icon } from 'react-icons-kit'
+import {view_off} from 'react-icons-kit/ikons/view_off'
+import {view} from 'react-icons-kit/ikons/view'
+import { useState } from "react";
 
 
 function SignUp () {
+    const [iconChange , setIconChange] = useState(view_off)
+    const [type , setType] = useState("password")
+    const [iconChange2 , setIconChange2] = useState(view_off)
+    const [type2 , setType2] = useState("password")
+
+    const handleToggle = () => {
+        if(type === "password"){
+            setType("text")
+            setIconChange(view)
+        } else {
+            setType("password")
+            setIconChange(view_off)
+        }
+    }
+    const handleToggle2 = () => {
+        if(type === "password"){
+            setType2("text")
+            setIconChange2(view)
+        } else {
+            setType2("password")
+            setIconChange2(view_off)
+        }
+    }
     // configure yup
     YupPassword(Yup)
 
@@ -87,6 +114,7 @@ function SignUp () {
                             type="text" 
                             id="name" 
                             placeholder="fullname" 
+                            className="input"
                             onChange={(event) => formik.setFieldValue("fullname", event.target.value)}
                             />
                             <label htmlFor="username">Username</label>
@@ -94,6 +122,7 @@ function SignUp () {
                             name="username" 
                             type="text" 
                             id="username" 
+                            className="input"
                             placeholder="Username"
                             onChange={(event) => formik.setFieldValue("username", event.target.value)}
                             />
@@ -103,29 +132,42 @@ function SignUp () {
                             name="email"  
                             type="Email" 
                             id="Email" 
+                            className="input"
                             placeholder="Email Address" 
                             onChange={(event) => formik.setFieldValue("email", event.target.value)}
                             />
                         </div>
                             <div className="form-password d-flex flex-column">
-                                <label htmlFor="password">Password</label>
-                                {formik.errors.password ? <div className="alert alert-danger">{formik.errors.password}</div> : null}
-                                <input 
-                                name="password"  
-                                type="password" 
-                                id="password" 
-                                placeholder="Password"
-                                onChange={(event) => formik.setFieldValue("password", event.target.value)}
-                                />
-                                <label htmlFor="re-password">Re-Password</label>
-                                {formik.errors.password2 ? <div className="alert alert-danger">{formik.errors.password}</div> : null}
-                                <input 
-                                name="password2"  
-                                type="password" 
-                                id="re-password" 
-                                placeholder="Password"
-                                onChange={(event) => formik.setFieldValue("password2", event.target.value)}
-                                />
+                                <div className="d-flex flex-column">
+                                    <label htmlFor="password">Password</label>
+                                    {formik.errors.password ? <div className="alert alert-danger">{formik.errors.password}</div> : null}
+                                    <div className="form-password-border">
+                                        <input 
+                                        name="password"  
+                                        type={type} 
+                                        id="password" 
+                                        className="input"
+                                        placeholder="Password"
+                                        onChange={(event) => formik.setFieldValue("password", event.target.value)}
+                                        />
+                                        <span onClick={handleToggle}> <Icon className=" icon" icon={iconChange}/> </span>
+                                    </div>
+                                </div>
+                                <div className="mt-2">
+                                    <label htmlFor="re-password">Re-Password</label>
+                                    {formik.errors.password2 ? <div className="alert alert-danger">{formik.errors.password}</div> : null}
+                                    <div className="form-password-border">
+                                        <input 
+                                        name="password2"  
+                                        type={type2}
+                                        id="re-password" 
+                                        className="input"
+                                        placeholder="Password"
+                                        onChange={(event) => formik.setFieldValue("password2", event.target.value)}
+                                        />
+                                        <span onClick={handleToggle2}> <Icon className=" icon" icon={iconChange2}/> </span>
+                                    </div>
+                                </div>
                             </div>
                                     
                         <div className="checkBox d-flex flex-row ">

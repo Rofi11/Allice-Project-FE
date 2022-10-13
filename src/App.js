@@ -7,6 +7,7 @@ import Profile from './pages/Profile/Profile';
 import EditProfile from './pages/EditProfile/EditProfile';
 import Forgot from './pages/ForgotPassword/Forgot';
 import KomentarHomeDetail from './components/KomentarHomeDetail';
+import VerificationPage from './components/verification';
 //redux
 import {connect} from 'react-redux'
 import {userKeepLogin, checkStorage } from './redux/actions/userAct'
@@ -18,10 +19,10 @@ class App extends Component {
   // cek apakah sudah login apa belum
   componentDidMount() {
     const userLocalStorage = localStorage.getItem("UserDataAllice")
-    // console.log(userLocalStorage);
+    console.log(userLocalStorage);
 
     // pengkondisian jika tersimpan di local = true, maka jalankan keep login
-    if(userLocalStorage){
+    if(userLocalStorage != undefined){
       const userData = JSON.parse(userLocalStorage)
       this.props.userKeepLogin(userData)
       // this.props.getPostData(userData.id)
@@ -45,6 +46,8 @@ class App extends Component {
           <Route path='/profile/:id' element={<Profile/>}/>
           <Route path="/editprofile" element={<EditProfile/>}/>
           <Route path="/forgot-password" element={<Forgot/>}/>
+          <Route path="/authentication/:token" element={<VerificationPage/>}/>
+          <Route path="/authentication" element={<VerificationPage/>}/>
         </Routes>
       );
     }

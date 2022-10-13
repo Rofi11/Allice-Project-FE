@@ -64,7 +64,7 @@
     /* border: 1px solid red; */
     width: 56px;
     height: 56px;
-    border-radius: 50%;
+    /* border-radius: 50%; */
     overflow: hidden;
     margin-right: 15px;
 }
@@ -118,8 +118,4 @@
     color: rgb(199, 199, 199);
     font-size: 12px;
     font-weight: 400;
-}
-
-body {
-    background-color: rgb(253, 247, 247);
 }

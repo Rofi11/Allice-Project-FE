@@ -3,6 +3,7 @@ import Axios  from "axios";
 import {API_URL} from '../../constants/API'
 import customer from "../../assets/image/iconsAllice/customer.png"
 import axios from "axios";
+import { Navigate, useNavigate } from "react-router-dom";
 
 export const createAccountGlobal = (values, setSubmitting) => {
     return async function (dispatch) {
@@ -14,8 +15,9 @@ export const createAccountGlobal = (values, setSubmitting) => {
                     email : values.email,
                     password : values.password,
                     role : "user",
-                    fotoProfile: {customer},
+                    fotoProfile: "",
                     bio : "",
+                    status : "unverified"
                 })
                 .then((result) => {
                     console.log(result.data);
@@ -31,6 +33,7 @@ export const createAccountGlobal = (values, setSubmitting) => {
                 .catch((err) => {
                     alert(err)
                 })
+                Navigate('/authentication')
             } else {
                 alert("password tidak singkron")
             }
@@ -43,39 +46,41 @@ export const createAccountGlobal = (values, setSubmitting) => {
     }
 }
 
-export const loginUser = ({user_email, password}) => {
+// tidak dipakai karena authorization pakai post di contoh nya, ada di bawah loginV2, hasil nya sama saja, bug ya pun sama, bebas pakai yg mana nya
+export const loginUser = ({user_email, password}) => { 
     return (dispatch) => {
-        Axios.get(`${API_URL}/users/get`, {
+        Axios.get(`${API_URL}/users/get`, { // pakai method get
             params:{
                 user_email:user_email,
                 password : password
             }
         })
         .then((result) => {
-            // console.log(result.data); //hasilnya bentuk array
-            if(result.data.length) {
-                if(password === result.data[0].password){
+            console.log(result.data.dataLogin); //dikirm dalam bentuk object di data login
+            if(result.data.dataLogin) {
+                if(result.data.dataLogin.status === "verified"){
                     //delete pass dulu, agar tidak tersimpan di localstorage maupun di global state
-                    delete result.data[0].password
+                    delete result.data.password
                     // console.log(result.data[0]);
 
-                    localStorage.setItem("UserDataAllice", JSON.stringify(result.data[0]))
+                    localStorage.setItem("UserDataAllice", JSON.stringify(result.data.dataLogin))
                     dispatch({
                         type : "USER_LOGIN",
-                        payload :result.data[0]
+                        payload :result.data.dataLogin
                     })
                 } else {
                     //handle wrong password
                     dispatch({
                         type : "USER_ERROR",
-                        payload : "Wrong Password"
+                        payload : "Wrong password"
                     })
                 }
             } else {
                 //handle user not found
             dispatch({
                     type : "USER_ERROR",
-                    payload : "User Not Found"
+                    payload : result.data.message,
+                    
                 })
             }
         })
@@ -88,16 +93,17 @@ export const loginUser = ({user_email, password}) => {
 export const logoutUser = () => {
     localStorage.removeItem("UserDataAllice")
     return {
-        type : "USER_LOGOUT"
+        type : "USER_LOGOUT",
     }
+    Navigate('/login')
 }
 
 export const userKeepLogin = (userData) => {
-    // console.log(userData);
+    console.log(userData);
     return (dispatch) => {
         Axios.get(`${API_URL}/users/userKeepLogin`, {
             params: {
-                idusers : userData.idusers
+                idusers: userData.idusers
             }
         })
         .then((result) => {
@@ -123,7 +129,57 @@ export const checkStorage = () => {
     }
 }
 
-//utk forgot
+
+//login pakai metode (post) authorization seperti contoh, ini jalan, hanya yg wrong password tidak jalan, sama seperti yg loginUser diatas
+export const loginV2 = ({user_email, password}) => {
+    return (dispatch) => {
+        Axios.post(`${API_URL}/users/getV2`, {  // pakai method post
+            user_email:user_email,
+            password : password
+        })
+        .then((result) => {
+            console.log(result.data); //dikirm dalam bentuk object di data login
+            if(result.data.dataLogin) {
+                if(result.data.dataLogin.status == "verified"){
+                    //delete pass dulu, agar tidak tersimpan di localstorage maupun di global state
+                    delete result.data.password
+                    // console.log(result.data[0]);
+
+                    localStorage.setItem("UserDataAllice", JSON.stringify(result.data.dataLogin))
+                    dispatch({
+                        type : "USER_LOGIN",
+                        payload :result.data.dataLogin
+                    })
+                } else {
+                    //handle wrong password
+                    dispatch({
+                        type : "USER_ERROR",
+                        payload : "Wrong Password"
+                    })
+                }
+            } else {
+                //handle user not found
+            dispatch({
+                    type : "USER_ERROR",
+                    // payload : "User Not Found",
+                    payload : result.data.message,
+                    
+                })
+            }
+        })
+        .catch((err) => {
+            console.log(err);
+            dispatch({
+                    type : "USER_ERROR",
+                    payload : "User Not Found",
+                    // payload : result.data.message,
+                    
+                })
+        })
+    }
+}
+
+// utk forgot
 export const cekEmail = (values, setSubmitting) => {
     return async function (dispatch) {
         try {

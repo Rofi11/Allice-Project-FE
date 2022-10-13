@@ -100,8 +100,18 @@
     border: none;
 }
 
-.form-password #password {
-    margin-bottom: 15px;
+.form-password .input {
+    width: 95%;
+    outline: none;
+    /* border: 1px solid rgba(0, 0, 0, 0.4) */
+}
+
+.form-password-border {
+    border: 1px solid rgba(0, 0, 0, 0.4)
+}
+
+.form-password-border .icon {
+    vertical-align: top;
 }
 
 

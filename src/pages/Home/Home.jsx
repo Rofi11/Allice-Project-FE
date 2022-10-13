@@ -8,18 +8,20 @@ import InfoBox from '../../components/InfoBox';
 import { connect ,useSelector, useDispatch} from 'react-redux';
 import Axios from "axios"
 import { API_URL } from '../../constants/API';
-import { useParams } from 'react-router-dom';
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
-import emoticon from "../../assets/image/iconsAllice/emoticon.png"
-import ellipsis from "../../assets/image/iconsAllice/ellipsis.png"
-import bookmark from "../../assets/image/iconsAllice/bookmark.png"
-import heart from "../../assets/image/iconsAllice/heart.png"
-import chat from "../../assets/image/iconsAllice/chat.png"
-import send from "../../assets/image/iconsAllice/send.png"
+import {Avatar} from '@chakra-ui/react'
+// import { useParams } from 'react-router-dom';
+// import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+// import emoticon from "../../assets/image/iconsAllice/emoticon.png"
+// import ellipsis from "../../assets/image/iconsAllice/ellipsis.png"
+// import bookmark from "../../assets/image/iconsAllice/bookmark.png"
+// import heart from "../../assets/image/iconsAllice/heart.png"
+// import chat from "../../assets/image/iconsAllice/chat.png"
+// import send from "../../assets/image/iconsAllice/send.png"
 
 
 function Home () {
-    const {username, fullName, fotoProfile } = useSelector(state => state.userReducer)
+    const {username, fullname, fotoProfile,idusers } = useSelector(state => state.userReducer)
+    // console.log(idusers);
 
     const [postHome, setPostHome] = useState([])
     // const [modal, setModal] = useState(false)
@@ -32,7 +34,7 @@ function Home () {
 
     // fetch data
     const fetchPostHome = () => {
-        Axios.get(`${API_URL}/post`)
+        Axios.get(`${API_URL}/post/get/${idusers}`)
         .then((res) => {
             // console.log(res.data);
             setPostHome(res.data)
@@ -58,7 +60,7 @@ function Home () {
 
 
     return(
-        <div className='background bg bg-light'>
+        <div className='bg bg-light'>
             <MyNavBar/>
             {/* bagian story */}
             <div className="containerUtama row">
@@ -100,11 +102,12 @@ function Home () {
                         <div className="info-profile">
                             <div className='d-flex align-items-center'>
                                 <div className='image'>
-                                    <img src={fotoProfile} alt="" />
+                                    {/* <img src={fotoProfile} alt="" /> */}
+                                    <Avatar name='' src={fotoProfile}/>
                                 </div>
                                 <div className='info-profile-name'>
                                     <div>{username}</div>
-                                    <div className='text-muted'>{fullName}</div>
+                                    <div className='text-muted'>{fullname}</div>
                                 </div>
                             </div>
                         </div>

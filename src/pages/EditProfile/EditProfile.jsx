@@ -8,17 +8,21 @@ import { API_URL } from '../../constants/API';
 import { userKeepLogin } from '../../redux/actions/userAct';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import { Component } from 'react';
+import {Avatar} from '@chakra-ui/react'
 
 function EditProfile () {
-    const {username, fullName , bio, fotoProfile, id} = useSelector((state) => state.userReducer)
+    const {username, fullname , bio, fotoProfile, idusers} = useSelector((state) => state.userReducer)
+    // console.log(idusers);
 
     const dispatch = useDispatch()
 
     const [editUsername, setEditUsername] = useState(username)
-    const [editFullname, setEditFullname] = useState(fullName)
+    const [editFullname, setEditFullname] = useState(fullname)
     const [editBio, setEditBio] = useState(bio)
     const [editfotoProfile, setEditFotoProfile] = useState(fotoProfile)
+    const [editfilename, setEditFileName] = useState("")
     const [edit, setEdit] = useState(0)
+    console.log(editfotoProfile);
 
     function inputHandler (event, field) {
         const value = event.target.value
@@ -29,8 +33,16 @@ function EditProfile () {
             setEditFullname(value)
         } else if (field === "editBio"){
             setEditBio(value)
-        } else if (field === "editFotoProfile"){
-            setEditFotoProfile(value)
+        }
+    }
+
+    // handler button add browser
+    const BtnAddFile = (e) => {
+        if (e.target.files[0]) {
+            setEditFileName(e.target.files[0].name)
+            setEditFotoProfile(e.target.files[0])
+            let preview = document.getElementById("imgpreview2")
+            preview.src = URL.createObjectURL(e.target.files[0])
         }
     }
 
@@ -39,15 +51,15 @@ function EditProfile () {
     }
 
     function SaveBtnHandler () {
-        axios.patch(`${API_URL}/users/${id}`, {
+        axios.patch(`${API_URL}/users/edit-profile/${idusers}`, {
             username :editUsername,
-            fullName: editFullname,
+            fullname: editFullname,
             bio :editBio,
             fotoProfile : editfotoProfile
         })
         .then((result) => {
-            alert("berhasil mengubah data")
-            dispatch(userKeepLogin(id))
+            alert("berhasil menambahkan data")
+            // dispatch(userKeepLogin(idusers))
             cancel()
         })
         .catch((err) => {
@@ -79,7 +91,8 @@ function EditProfile () {
                 <div className='section2 col d-flex flex-column'>
                     <div className='section2-edit-fotoProfile d-flex my-2'>
                         <div className='section2-edit-image'>
-                            <img src={fotoProfile} alt="" />
+                            {/* <img src={fotoProfile} alt="" /> */}
+                            <Avatar name='' src={fotoProfile}/>
                         </div>
                         <div>
                             <div className='section2-edit-fotoProfile-name'>{username}</div>
@@ -89,7 +102,7 @@ function EditProfile () {
                     <div className='section2-edit-nama d-flex my-2'>
                         <label htmlFor="name">Nama</label>
                         <input 
-                        value={editFullname}
+                        defaultValue={editFullname}
                         type="text" 
                         className='form-control me-2' 
                         onChange={(e) => inputHandler(e ,"editFullname")} 
@@ -98,7 +111,7 @@ function EditProfile () {
                     <div className='section2-edit-username d-flex my-2'>
                         <label htmlFor="username">UserName</label>
                         <input 
-                        value={editUsername}
+                        defaultValue={editUsername}
                         type="text" 
                         className='form-control me-2' 
                         onChange={(e) => inputHandler(e, "editUsername")} 
@@ -107,7 +120,7 @@ function EditProfile () {
                     <div className='section2-edit-bio d-flex my-2'>
                         <label htmlFor="Bio">Bio</label>
                         <input 
-                        value={editBio}
+                        defaultValue={editBio}
                         type="text" 
                         className='form-control me-2' 
                         onChange={(e) => inputHandler(e, "editBio")} 
@@ -116,11 +129,17 @@ function EditProfile () {
                     <div className='section2-edit-bio d-flex my-2'>
                         <label htmlFor="fotoProfile">Foto Profile</label>
                         <input 
-                        value={editfotoProfile}
-                        type="text" 
+                        defaultValue={fotoProfile}
+                        type="file" 
                         className='form-control me-2' 
-                        onChange={(e) => inputHandler(e, "editFotoProfile")} 
+                        style={{height: "max-content"}}
+                        onChange={(e) => BtnAddFile(e)} 
                         />
+                    </div>
+                    <div className='d-flex justify-content-center'>
+                        <div className="col-md-3">
+                            <img id="imgpreview2" width="100%"/>
+                        </div>
                     </div>
                     <button className='btn btn-primary mt-3' onClick={SaveBtnHandler}>Save</button>
                 </div>
@@ -131,135 +150,3 @@ function EditProfile () {
 
 export default EditProfile
 
-// class EditProfile extends Component {
-//     state = {
-//         editId: `${this.props.userGlobal.id}`,
-//         editUsername : `${this.props.userGlobal.username}`,
-//         editFullname : `${this.props.userGlobal.fullName}`,
-//         editFotoProfile : `${this.props.userGlobal.fotoProfile}`,
-//         editBio : `${this.props.userGlobal.bio}`
-//     }
-
-
-//     //utk mengatasi inputan
-//     inputHandler = (event) => {
-//         const {name, value} = event.target
-
-//         this.setState({[name] : value})
-//         // console.log(this.state.editUsername);
-//     }
-
-//     SaveBtnHandler = () => {
-//         axios.patch(`${API_URL}/users/${this.state.editId}`, {
-//             username :this.state.editUsername,
-//             fullName: this.state.editFullname,
-//             bio :this.state.editBio,
-//             fotoProfile : this.state.editFotoProfile
-//         })
-//         .then((result) => {
-//             alert("berhasil mengubah data")
-//         })
-//         .catch((err) => {
-//             alert(err)
-//         })            
-//     }
-
-//     componentDidUpdate() {
-//         this.props.userKeepLogin(this.state.editId)
-//     }
-
-//     render () {
-//         return(
-//             <div className=' bg bg-light'>
-//             <MyNavbar/>
-//             <div className='edit-profile row'>
-//                 <div className='section1 col-4'>
-//                     <div className="edit-profile-menu d-flex flex-column align-items-center">
-//                         <div>Edit Profile</div>
-//                         <div>Ubah Kata Sandi</div>
-//                         <div>Aplikasi dan situs web</div>
-//                         <div>Notifikasi email</div>
-//                         <div>Notifikasi otomatis</div>
-//                         <div>Kelola Kontak</div>
-//                         <div>Privasi dan Keamanan</div>
-//                         <div>Aktivitas login</div>
-//                         <div>Email dari Instagram</div>
-//                         <div>Bantuan</div>
-//                         <div>Koleksi digital</div>
-//                         <div>Beralih ke Akun Profesional</div>
-//                     </div>
-//                 </div>
-//                 <div className='section2 col d-flex flex-column'>
-//                     <div className='section2-edit-fotoProfile d-flex my-2'>
-//                         <div className='section2-edit-image'>
-//                             <img src={this.props.userGlobal.fotoProfile} alt="" />
-//                         </div>
-//                         <div>
-//                             <div className='section2-edit-fotoProfile-name'>{this.props.userGlobal.username}</div>
-//                             <div className='section2-edit-fotoProfile-ubah'>Ubah Foto Profile</div>
-//                         </div>
-//                     </div>
-//                     <div className='section2-edit-nama d-flex my-2'>
-//                         <label htmlFor="name">Nama</label>
-//                         <input
-//                         name='editFullname' 
-//                         type="text" 
-//                         className='form-control me-2' 
-//                         onChange={this.inputHandler}
-//                         // onChange={(e) => inputHandler( "editFullname")} 
-//                         value={this.state.editFullname}
-//                         />
-//                     </div>
-//                     <div className='section2-edit-username d-flex my-2'>
-//                         <label htmlFor="username">UserName</label>
-//                         <input 
-//                         name='editUsername'
-//                         type="text" 
-//                         className='form-control me-2' 
-//                         onChange={this.inputHandler}
-//                         // onChange={(e) => inputHandler(e, "editUsername")} 
-//                         value={this.state.editUsername}
-//                         />
-//                     </div>
-//                     <div className='section2-edit-bio d-flex my-2'>
-//                         <label htmlFor="Bio">Bio</label>
-//                         <input 
-//                         name='editBio'
-//                         type="text" 
-//                         className='form-control me-2' 
-//                         onChange={this.inputHandler}
-//                         // onChange={(e) => inputHandler(e, "editBio")} 
-//                         value={this.state.editBio}
-//                         />
-//                     </div>
-//                     <div className='section2-edit-bio d-flex my-2'>
-//                         <label htmlFor="Bio">Foto Profile</label>
-//                         <input 
-//                         name='editFotoProfile'
-//                         type="text" 
-//                         className='form-control me-2' 
-//                         onChange={this.inputHandler}
-//                         // onChange={(e) => inputHandler(e, "editBio")} 
-//                         value={this.state.editFotoProfile}
-//                         />
-//                     </div>
-//                     <button className='btn btn-primary mt-3' onClick={this.SaveBtnHandler}>Save</button>
-//                 </div>
-//             </div>
-//             </div>
-//         )
-//     }
-// }
-
-// const mapStateToProps = (state) => {
-//     return {
-//         userGlobal : state.userReducer
-//     }
-// }
-
-// const mapDispatchToProps = {
-//     userKeepLogin
-// }
-
-
-// export default connect(mapStateToProps, mapDispatchToProps) (EditProfile)

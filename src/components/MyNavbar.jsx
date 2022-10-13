@@ -11,6 +11,7 @@ import home from "../assets/image/iconsAllice/home.png"
 import "../assets/styles/MyNav.css"
 import axios from 'axios';
 import { API_URL } from '../constants/API';
+import {Avatar} from '@chakra-ui/react'
 //redux
 import {logoutUser, userKeepLogin} from '../redux/actions/userAct'
 
@@ -20,6 +21,9 @@ class MyNavBar extends Component {
             postImage: "",
             caption : "",
             isPilihFoto : false,
+            previewFoto : true,
+            addFile : "",
+            addFileName: "",
         };
 
     toggle = this.toggle.bind(this);
@@ -27,7 +31,8 @@ class MyNavBar extends Component {
 
     toggle() {
         this.setState({
-        modal: !this.state.modal
+        modal: !this.state.modal,
+        isPilihFoto : false
         });
     }
 
@@ -37,41 +42,58 @@ class MyNavBar extends Component {
         const name = event.target.name
 
         this.setState({[name] : value})
+        // console.log(this.state.caption);
     }
 
-    //handler pilih foto
+    // handler pilih foto
     btnPilihFoto = () => {
         this.setState({
             isPilihFoto : true
         })
     }
 
+    // handler button add browser
+    onBtnAddFile = (e) => {
+        if (e.target.files[0]) {
+            this.setState({ addFileName: e.target.files[0].name,
+                addFile: e.target.files[0] ,
+                previewFoto : false
+            })
+            let preview = document.getElementById("imgpreview")
+            preview.src = URL.createObjectURL(e.target.files[0])
+        }
+    }
+
+    
     btnBagikanHandler = () => {
         const d = new Date()
-
-        axios.post(`${API_URL}/post` , {
-            userId : this.props.userGlobal.id,
-            PostImage : this.state.postImage,
-            caption : this.state.caption,
-            createddate : `${d.getMonth()}, ${d.getDate()} - ${d.getFullYear()}`,
-            like : 0,
-            comment : []
-        })
-        .then((result) => {
-            alert("Berhasil menambahkan foto baru")
-            this.setState({
-                modal : false
+        console.log(this.state.addFile);
+        if(this.state.addFile) {
+            let formData = new FormData()
+            let obj = {
+                caption : this.state.caption,
+                created_date : `${d.getMonth()}- ${d.getDate()} - ${d.getFullYear()}`,
+                idusers : this.props.userGlobal.idusers
+            }
+    
+            //definr masukan ke dalam from data
+            formData.append('data', JSON.stringify(obj))
+            formData.append('file', this.state.addFile)
+    
+            // kirimkan data
+            axios.post(`${API_URL}/post/upload`, formData)
+            .then((res) => {
+                alert(res.data.message)
             })
-            this.props.userKeepLogin(this.props.userGlobal.id)
-        })
-        .catch((err) => {
-            alert(err)
-        })
+            .catch((err) => {
+                console.log(err);
+            })
+        }
     }
 
-    componentDidUpdate () {
-        this.props.userKeepLogin(this.props.userGlobal.id)
-    }
+    // componentDidUpdate () {
+    //     this.btnBagikanHandler()
+    // }
 
     render() {
         return (
@@ -110,7 +132,8 @@ class MyNavBar extends Component {
                         </NavItem>
                         <UncontrolledDropdown className='posi'>
                             <DropdownToggle className='customer'>
-                                <img src={this.props.userGlobal.fotoProfile} alt="" />
+                                {/* <img src={this.props.userGlobal.fotoProfile} alt="" /> */}
+                                <Avatar size='sm' name='' src={this.props.userGlobal.fotoProfile} className='avatar'/>
                             </DropdownToggle>
                             <DropdownMenu end>
                                 <div className="square">
@@ -148,15 +171,23 @@ class MyNavBar extends Component {
                                 <div className='d-flex row'>
                                     <div className='box-add-home d-flex flex-column align-items-center col-7'>
                                         <div className='box-add-home-postingan d-flex flex-column justify-content-center align-items-center'>
-                                            <div>Masukan Foto dan Video di sini</div>
-
+                                            {
+                                                this.state.previewFoto ?
+                                                <div>Masukan Foto dan Video di sini</div> 
+                                                :
+                                                null
+                                            }
+                                            <div className="col-md-3">
+                                                <img id="imgpreview" width="100%"/>
+                                            </div>
                                             {
                                                 this.state.isPilihFoto ?
                                                 <input 
-                                                type="text" 
+                                                accept='image/png , image/jpg, image/jpeg'
+                                                type="file" 
                                                 className='mb-2' 
                                                 name='postImage'
-                                                onChange={this.inputHandler}
+                                                onChange={this.onBtnAddFile}
                                                 /> 
                                                 :
                                                 null
@@ -167,7 +198,8 @@ class MyNavBar extends Component {
                                     <div className='box-add-home-caption col-5'>
                                         <div className='box-add-home-caption-account d-flex mb-3'>
                                             <div className='box-add-home-caption-account-profile me-2'>
-                                                <img src={this.props.userGlobal.fotoProfile} alt="" />
+                                                {/* <img src={this.props.userGlobal.fotoProfile} alt="" /> */}
+                                                <Avatar size='sm' name='' src={this.props.userGlobal.fotoProfile} className='avatar'/>
                                             </div>
                                             <div className='text-align-center'>{this.props.userGlobal.username}</div>
                                         </div>
@@ -216,3 +248,22 @@ export default connect(mapStateToProps,mapDispatchToProps)(MyNavBar)
                             //             <button className='btn btn-primary'>Pilih Foto</button>
                             //     </div>
                             // </ModalBody>
+
+        // axios.post(`${API_URL}/post/upload` , {
+        //     userId : this.props.userGlobal.id,
+        //     PostImage : this.state.postImage,
+        //     caption : this.state.caption,
+        //     createddate : `${d.getMonth()}, ${d.getDate()} - ${d.getFullYear()}`,
+        //     like : 0,
+        //     comment : []
+        // })
+        // .then((result) => {
+        //     alert("Berhasil menambahkan foto baru")
+        //     this.setState({
+        //         modal : false
+        //     })
+        //     this.props.userKeepLogin(this.props.userGlobal.id)
+        // })
+        // .catch((err) => {
+        //     alert(err)
+        // })

@@ -1,6 +1,7 @@
 import React from 'react';
 import "../assets/styles/PostCard.css"
 import { useNavigate } from 'react-router-dom';
+import { API_URL } from '../constants/API';
 
 const PostCard = (props) => {
     const navigate = useNavigate()
@@ -11,7 +12,7 @@ const PostCard = (props) => {
 
     return(
         <div className='post-card'>
-            <img src={props.PostCardData.PostImage} onClick={() => {handleClick(props.PostCardData.id)}} alt="" />
+            <img src={ API_URL+ props.PostCardData.postImage} onClick={() => {handleClick(props.PostCardData.idpost)}} alt="" />
         </div>
     )
 }

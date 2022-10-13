@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import "bootstrap/dist/css/bootstrap.css"
 import {Link, Navigate} from 'react-router-dom'
 import {connect} from 'react-redux' 
-import {loginUser} from '../../redux/actions/userAct'
+import {loginUser , loginV2} from '../../redux/actions/userAct'
 import { Icon } from 'react-icons-kit'
 import {view_off} from 'react-icons-kit/ikons/view_off'
 import {view} from 'react-icons-kit/ikons/view'
@@ -65,7 +65,7 @@ class Login extends Component {
                                 this.props.userGlobal.errMsg ? 
                                 <div className="alert alert-danger">{this.props.userGlobal.errMsg}</div> : null
                             }
-                            <label htmlFor="username">Username</label>
+                            <label htmlFor="username">Username or Email</label>
                             <input name="user_email" className="input" onChange={this.inputHandler} type="text" id="user_email" placeholder="Username or Email Address" />
                         </div>
                             <div className="form-passwordxx d-flex flex-column">
@@ -105,7 +105,8 @@ const mapStateToProps = (state) => {
 
 // action object global
 const mapDispatchToProps = {
-    loginUser
+    loginUser,
+    loginV2
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Login)

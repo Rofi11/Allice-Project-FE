@@ -8,6 +8,7 @@ const init_state = {
     errMsg: "",
     fotoProfile:"",
     bio: "",
+    status: "",
     StorageisChecked : false,
     isAdd : false,
     isDetail : false

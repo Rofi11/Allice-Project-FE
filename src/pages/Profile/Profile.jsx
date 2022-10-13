@@ -17,10 +17,12 @@ import { API_URL } from '../../constants/API';
 import { useState,  useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import Komentar from '../../components/Komentar';
+import {Avatar} from '@chakra-ui/react'
+import axios from 'axios';
 
 function Profile () {
-    const {fotoProfile, username,fullName, bio} = useSelector(state => state.userReducer)
-
+    const {fotoProfile, username,fullname, bio , idusers} = useSelector(state => state.userReducer)
+    // console.log(idusers);
     const [postFoto, setPostFoto] = useState([])
     const [modal, setModal] = useState(false)
     const [modal2, setModal2] = useState(false)
@@ -30,15 +32,15 @@ function Profile () {
     const [postKomen , setPostKomen] = useState([])
 
     const {id} = useParams()
+    // console.log(id);
 
-    
     //modal
     const toggle = () => setModal(!modal)
 
     const toggle2 = () => setModal2(!modal2)
     // fetch data post
     const fetchPostImage = () => {
-        Axios.get(`${API_URL}/post`)
+        Axios.get(`${API_URL}/post/get/${idusers}`)
         .then((result) => {
             // console.log(result.data[0].comment)
             // console.log(result.data);
@@ -49,24 +51,25 @@ function Profile () {
         })
     }
 
+
     //component did mount
     useEffect(() => {
         fetchPostImage()
     }, [])
 
     useEffect(() => {
-        Axios.get(`${API_URL}/post/${id}`)
+        fetchComment()
+        Axios.get(`${API_URL}/post/getDetail/${id}`)
         .then((result) => {
             // console.log(result.data.comment);
             // console.log(result.data.like);
-            setPostFotoDetail(result.data)
-            // console.log(postFotoDetail);
-            setPostKomen(result.data.comment)
+            setPostFotoDetail(result.data[0])
         })
         .catch((err) => {
             console.log(err);
         })
     }, [id])
+    // console.log(postFotoDetail);
 
     const renderPostCard = () => {
         return postFoto.map((val) => {
@@ -74,11 +77,6 @@ function Profile () {
         })
     }
 
-    const renderComment = () => {
-        return postKomen.map((val) => {
-            return <Komentar komentarData={val} />
-        })
-    }
 
     //handler btn edit
     const editBtn = () => {
@@ -88,11 +86,12 @@ function Profile () {
     const deleteBtnHandler = (postId) => {
         const confirmDelete = window.confirm("nyakin mendelete post ?")
         if (confirmDelete) {
-            Axios.delete(`${API_URL}/post/${postId}`)
+            Axios.delete(`${API_URL}/post/delete-post/${postId}`)
             .then((result) => {
                 fetchPostImage()
                 setModal(false)
                 setModal2(false)
+                alert(result.data.message)
             })
             .catch((err) => {
                 alert(err)
@@ -111,8 +110,26 @@ function Profile () {
         }
     }
 
+    // hadling ambil data comment
+    const fetchComment = () => {
+        axios.get(`${API_URL}/comment/get/${id}`)
+        .then((res) => {
+            setPostKomen(res.data)
+            console.log(res.data);
+        })
+        .catch((err) => {
+            console.log(err);
+        })
+    }
+
+    const renderComment = () => {
+        return postKomen.map((val) => {
+            return <Komentar postKomen={val}/>
+        })
+    }
+
     const saveNewCaption = () => {
-        Axios.patch(`${API_URL}/post/${id}` , {
+        Axios.patch(`${API_URL}/post/edit-caption/${id}` , {
             //yg mau di edit nya
             caption: editCaption
         })
@@ -128,12 +145,13 @@ function Profile () {
     }
 
     return (
-        <div className='bg bg-light'>
+        <div className='containerxx'>
                 <MyNavbar/>
                 <div className='container-profile'>
                     <div className="profile d-flex">
                         <div className="profile-image ">
-                            <img src={fotoProfile} alt="" />
+                            {/* <img src={fotoProfile} alt="" /> */}
+                            <Avatar size='2xl' name='' src={fotoProfile}/>
                         </div>
                         <div className="infoProfile">
                             <div className="info-profile-user my-1 d-flex">
@@ -146,7 +164,7 @@ function Profile () {
                                 <div>0 diikuti</div>
                             </div>
                             <div className="info-profile-nameAsli">
-                                {fullName}
+                                {fullname}
                             </div>
                             <div className='mt-1'>
                                 {bio}
@@ -174,13 +192,14 @@ function Profile () {
                     <div >
                             <div className='box-detail-post d-flex flex-row align-items-center row'>
                                 <div className="box-detail-post-image col-7">
-                                    <img src={postFotoDetail.PostImage} alt="" />
+                                    <img src={API_URL + postFotoDetail.postImage} alt="" />
                                 </div>
                                 <div className="box-detail-post-comment col-5 pt-1">
                                     <div className="box-detail-post-header d-flex justify-content-between align-items-center">
                                         <div className='d-flex align-items-center'>
                                             <div className='info-post-gambar d-flex align-items-center'>
-                                                <img src={fotoProfile} alt="" />
+                                                {/* <img src={fotoProfile} alt="" /> */}
+                                                <Avatar size='sm' name='' src={fotoProfile}/>
                                             </div>
                                             <div>{username}</div>
                                             </div>
@@ -192,7 +211,8 @@ function Profile () {
                                         {/* render caption */}
                                         <div className='d-flex align-items-center'>
                                             <div className='info-post-gambar d-flex align-items-center'>
-                                                <img src={fotoProfile} alt="" />
+                                                {/* <img src={fotoProfile} alt="" /> */}
+                                                <Avatar size='sm' name='' src={fotoProfile}/>
                                             </div>
                                             <div className='box-detail-post-Commentar-name'>{username}</div>
                                             <div className='box-detail-post-Commentar-komen'>{postFotoDetail.caption}</div>
@@ -205,13 +225,12 @@ function Profile () {
                                             <div className='box-detail-post-Commentar-name'>nama account</div>
                                             <div className='box-detail-post-Commentar-komen'>Commentar</div>
                                         </div> */}
-                                        {/* <Komentar/> */}
                                         {renderComment()}
                                     </div>
                                     <div className="box-detail-post-footer">
                                         {/* icon */}
                                         <div className='icon-card d-flex justify-content-between '>
-                                            <div>
+                                            <div className='d-flex ' style={{width : "120px"}}>
                                                 <span className='icon-card-heart ms-1'>
                                                     <img src={heart} alt="" />
                                                 </span>
@@ -228,16 +247,16 @@ function Profile () {
                                         </div>
                                         <div className="box-detail-post-footer-suka ms-2">
                                             <div>Di sukai oleh <span>amalia</span> dan <span>102 lainnya</span></div>
-                                            <div>{postFotoDetail.createddate}</div>
+                                            <div>{postFotoDetail.created_date}</div>
                                         </div>
                                         <div className="container-inputan">
                                             <span>
-                                                <img src={emoticon} alt="" />
+                                                <img src={emoticon} alt="" className='mt-3'/>
                                             </span>
                                             <input 
                                             type="text" 
                                             form='form-control' 
-                                            className='inputanx rounded my-2' 
+                                            className='inputanx rounded ms-5 my-2' 
                                             placeholder='comment here' 
                                             /> 
                                             <button>post</button>
@@ -283,13 +302,14 @@ function Profile () {
                     <div >
                             <div className='box-detail-post d-flex flex-row align-items-center row'>
                                 <div className="box-detail-post-image col-7">
-                                    <img src={postFotoDetail.PostImage} alt="" />
+                                    <img src={API_URL + postFotoDetail.postImage} alt="" />
                                 </div>
                                 <div className="box-detail-post-comment col-5 pt-1">
                                     <div className="box-detail-post-header d-flex justify-content-between align-items-center">
                                         <div className='d-flex align-items-center'>
                                             <div className='info-post-gambar d-flex align-items-center'>
-                                                <img src={fotoProfile} alt="" />
+                                                {/* <img src={fotoProfile} alt="" /> */}
+                                                <Avatar size='sm' name='' src={fotoProfile}/>
                                             </div>
                                             <div>{username}</div>
                                         </div>
