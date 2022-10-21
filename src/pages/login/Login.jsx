@@ -1,4 +1,4 @@
-import "./Login.css"
+import './login.css'
 import React, { Component } from 'react';
 import "bootstrap/dist/css/bootstrap.css"
 import {Link, Navigate} from 'react-router-dom'
