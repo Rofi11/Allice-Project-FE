@@ -71,24 +71,8 @@ function SignUp () {
         }
     })
 
-    // ukt membuat id, saat suda berinteraksi dengan back-end (akan dimatikan dulu, sampai nanti berinteraksi dengan backend), berhubung kita pakai global state harunya di simpan di global saja, anggap ini contoh
-    
-    // async function Register(values) {
-    //     let lastId = 1
-
-    //     await axiosInstance("/user/")
-    //     .then((res) => {
-    //         console.log(res.data.length);
-
-    //         //pengkondisian membaut id nya
-    //         if(res.data?.length > 0) {
-    //             lastId = res.data.length + 1
-    //         }
-    //     })
-    // }
-
     if (id) {
-        nav("/")
+        nav("/") // kalo ga daprt data, arahkan ke  / ==> login
     }
     return (
         <div className="container-utama d-flex">

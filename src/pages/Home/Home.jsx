@@ -8,53 +8,68 @@ import InfoBox from '../../components/InfoBox';
 import { connect ,useSelector, useDispatch} from 'react-redux';
 import Axios from "axios"
 import { API_URL } from '../../constants/API';
-import {Avatar} from '@chakra-ui/react'
-// import { useParams } from 'react-router-dom';
-// import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
-// import emoticon from "../../assets/image/iconsAllice/emoticon.png"
-// import ellipsis from "../../assets/image/iconsAllice/ellipsis.png"
-// import bookmark from "../../assets/image/iconsAllice/bookmark.png"
-// import heart from "../../assets/image/iconsAllice/heart.png"
-// import chat from "../../assets/image/iconsAllice/chat.png"
-// import send from "../../assets/image/iconsAllice/send.png"
+import {Avatar ,Spinner} from '@chakra-ui/react'
+import InfiniteScroll from 'react-infinite-scroller';
 
 
 function Home () {
-    const {username, fullname, fotoProfile,idusers } = useSelector(state => state.userReducer)
-    // console.log(idusers);
+    const {username, fullname, fotoProfile,id } = useSelector(state => state.userReducer)
 
     const [postHome, setPostHome] = useState([])
-    // const [modal, setModal] = useState(false)
-    // const [postFotoDetailHome, setPostFotoDetailHome] = useState([])
-
-    // const toggle = () => setModal(!modal)
-
-    // ambil id kiriman card
-    // const {id} = useParams()
+    const [hasMoreItems, setHasMoreItems] = useState(true);
+    const [page,setPage] = useState(1)
+    const [isLoading, setIsLoading] = useState(false);
 
     // fetch data
     const fetchPostHome = () => {
-        Axios.get(`${API_URL}/post/get/${idusers}`)
+        Axios.get(`${API_URL}/post/getAll?page=${page}&limit=2`)
         .then((res) => {
-            // console.log(res.data);
-            setPostHome(res.data)
+            const data = res.data.results
+            console.log(data);
+            setPostHome([...postHome, ...data]) // menyatukan data yg di get oleh front ke back-end
+            setPage(page + 1)
+
+            // console.log(res.data.results.length);
+            if(res.data.results.length == 0){
+                setHasMoreItems(false)
+            } else {
+                setHasMoreItems(true)
+            }
         })
         .catch((err) => {
             alert(err)
         })
+        .finally(() => {
+            setIsLoading(false)
+        })
     }
 
-    useEffect(() => {
-        fetchPostHome()
-    })
-
-    useEffect(() => {
-        fetchPostHome()
-    }, [postHome])
 
     const renderPost = () => {
         return postHome.map((val) => {
-            return <Card postData= {val}/>
+            // nilai awal utk like
+            let like = false
+            //penampung data
+            const arr = val?.Likes?.find((a) => {
+                return a.UsersId === id
+            })
+            // console.log(arr);
+        // pengkondisian jika data like ada
+        if (arr) { 
+            like = true
+        }
+
+            return <Card 
+                id = {val.id}
+                postImage = {val.postImage}
+                caption = {val.caption}
+                commentars = {val.Commentars}
+                created_date = {val.created_date}
+                likes = {val.number_of_likes}
+                checklike = {like}
+                username={val.User?.username}
+                avatar={val.User?.fotoProfile}
+                />
         })
     }
 
@@ -88,12 +103,20 @@ function Home () {
                             <BoxStory/>
                         </div>
                     </div>
+                    {
+                        isLoading ? <Spinner/> 
+                        :
                     <div className="box-card d-flex justify-content-around mt-3 flex-wrap ">
-                        {/* tinggal buat function utk loop kalo udh ada database */}
-                        {/* <Card/> 
-                        <Card/>  */}
-                        {renderPost()}
+                        <InfiniteScroll
+                        pageStart={0}
+                        loadMore={fetchPostHome}
+                        hasMore={hasMoreItems}
+                        >
+                            {renderPost()}
+
+                        </InfiniteScroll>
                     </div>                       
+                    }
                 </div>
                 {/* bagian 2 yang info box */}
                 <div className="box-info col-4 mt-5">

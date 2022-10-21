@@ -9,7 +9,7 @@ import { loginUser } from '../redux/actions/userAct';
 
 function VerificationPage () {
     const dispatch = useDispatch()
-    const [message , setMessage] = useState("Loading... \n Check Email Verification")
+    const [message , setMessage] = useState("Loading...")
 
     // tangkep token yg dikirim dari app.js
     const {token} = useParams()
@@ -26,13 +26,10 @@ function VerificationPage () {
         })
         .then((res) => {
             setMessage("Your Account Verified")
-            dispatch({
-                type : "USER_LOGIN",
-                payload : res.data[0]
-            })
+            console.log(res.data);
             // mengirim ke page utama, dng pandding 2 detik
             setTimeout(() => {
-                navigate("/home")
+                navigate("/")
             }, 2000)
         })
         .catch((err) => {
@@ -41,8 +38,23 @@ function VerificationPage () {
     }, [])
 
     return (
-        <div className='d-flex justify-content-center mt-3'>
-            <h2>{message}</h2>
+        <div className="container-utama d-flex">
+            {/* bagian gambar */}
+            <div className="section-gambar d-flex flex-column">
+                <div className="allice">
+                    <div className="name-allice">Allice</div>
+                    <div className="enjoy">Allice Help you Connect and Share with the People in your life</div>
+                </div>            
+            </div>
+
+            {/* bagian-form-login  */}
+            <div className="section-login d-flex justify-content-center">
+                {/* form */}
+                <div className="form-login d-flex flex-column">                  
+                    <h2>{message}</h2>
+                    <h2>Check your Email Account for verified Account</h2>
+                </div>
+            </div>
         </div>
     )
 }

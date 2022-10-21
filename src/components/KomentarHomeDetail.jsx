@@ -5,6 +5,7 @@ import bookmark from "../assets/image/iconsAllice/bookmark.png"
 import heart from "../assets/image/iconsAllice/heart.png"
 import chat from "../assets/image/iconsAllice/chat.png"
 import send from "../assets/image/iconsAllice/send.png"
+import heartMerah from "../assets/image/iconsAllice/heartMerah.png"
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
@@ -17,26 +18,37 @@ import {Avatar} from '@chakra-ui/react'
 import MyNavbar from './MyNavbar';
 
 function KomentarHomeDetail () {  
-    const {fotoProfile, username,} = useSelector(state => state.userReducer)
+    const userGlobal = useSelector(state => state.userReducer)
     const [postDetail, setPostDetail] = useState([])
     const [postKomen, setPostKomen] = useState([])
+    const [isiKomen , setIsiKomen] = useState("")
+    const [isDisable, setIsDisable] = useState(true)
+    const [changeHeart , setChangeHearth] = useState(true)
 
     const {id} = useParams()
     // console.log(id);
     // console.log(postDetail);
 
     const fetchDataPost = () => {
-        axios.get(`${API_URL}/post/get/${id}`)
+        axios.get(`${API_URL}/post/getDetail/${id}`)
         .then((result) => {
-            // console.log(postDetail.comment);
-            setPostDetail(result.data[0])
-            // setPostKomen(result.data.comment)
+            // console.log(result.data[0].Likes);
+            setPostDetail(result.data)
+            // console.log(result.data.Likes.length);
+            
+            // pengkondisian utk cek ada yg like atau tidak
+            if (result.data.Likes.length !== 0){
+                setChangeHearth(true)
+            } else {
+                setChangeHearth(false)
+            }
         })
         .catch((err) => {
-            alert(err)
+            console.log(err);
         })
     }
-
+    // console.log(likes.length);
+    
     const fetchComment = () => {
         axios.get(`${API_URL}/comment/get/${id}`)
         .then((res) => {
@@ -54,42 +66,95 @@ function KomentarHomeDetail () {
         })
     }
 
-
     useEffect(() => {
         fetchDataPost()
         fetchComment()
-    })
+    },[])
+
+        //handling utk isi komen
+    const inputHandler = (e, field) => {
+        const {value} = e.target
+        // console.log(value);
+
+        if(field === "komentar"){
+            setIsiKomen(value)
+            setIsDisable(false)
+        }
+    }
+
+    const btnPostKomen = () => {
+        if(isiKomen){
+            axios.post(`${API_URL}/comment/uploadcomment`, {
+                isi_commentar : isiKomen,
+                UsersId : userGlobal.id,
+                PostId : id,
+            })
+            .then((res) => {
+                alert(res.data.message)
+                setIsiKomen("")
+            })
+            .catch((err) => {
+                console.log(err);
+            })
+        }
+    }
+
+    useEffect(() => {
+        fetchComment()
+    }, [isiKomen])
+
+    // handle button like
+    const btnLike = () => {
+        axios.post(`${API_URL}/like/add-like`, {
+            UsersId : userGlobal.id,
+            PostId : id
+        })
+        .then((res) => {
+            alert(res.data.message)
+            // utk ubah-ubah heart nya
+            if(res.data.message === "Unlike Post"){
+                setChangeHearth(true)
+            } else {
+                setChangeHearth(false)
+            }
+        })
+        .catch((err) => {
+            console.log(err);
+        })
+    }
+
     return (
         <div>
             <MyNavbar/>
                 <div className='containerDetail d-flex justify-content-center'>
                     <div className='box-detail-post d-flex flex-row align-items-center row'>
                         <div className="box-detail-post-image col-7">
-                            <img src={API_URL+ postDetail.postImage} alt="" />
+                            <img src={postDetail.postImage} alt="" />
                         </div>
                         <div className="box-detail-post-comment col-5 pt-1">
                             <div className="box-detail-post-header d-flex justify-content-between align-items-center">
                                 <div className='d-flex align-items-center'>
                                     <div className='info-post-gambar d-flex align-items-center'>
                                         {/* <img src={fotoProfile} alt="" /> */}
-                                        <Avatar size='sm' name='' src={fotoProfile}/> 
+                                        <Avatar size='sm' name='' src={userGlobal.fotoProfile}/> 
                                     </div>
-                                    <div>{username}</div>
+                                    <div>{userGlobal.username}</div>
                                     </div>
                                     <div className='ellipsis'>
                                         <img src={ellipsis} alt="" />
                                     </div>
                                 </div>
+                            {/* render caption */}
+                            <div className='d-flex align-items-center'>
+                                <div className='info-post-gambar d-flex align-items-center'>
+                                    {/* <img src={fotoProfile} alt="" /> */}
+                                    <Avatar size='sm' name='' src={userGlobal.fotoProfile}/>
+                                </div>
+                                <div className='box-detail-post-Commentar-name'>{userGlobal.username}</div>
+                                <div className='box-detail-post-Commentar-komen'>{postDetail.caption}</div>
+                            </div>
                             <div className="box-detail-post-Commentar pt-2">
                                 {/* render commentar */}
-                                {/* <div className='d-flex align-items-center'>
-                                    <div className='info-post-gambar d-flex align-items-center'>
-                                        <img src="http://asset-a.grid.id/crop/0x0:0x0/780x800/photo/bobofoto/original/17235_jenis-jenis-hutan-berdasarkan-bentang-alamnya.jpg" alt="" />
-                                    </div>
-                                    <div className='box-detail-post-Commentar-name'>nama account</div>
-                                    <div className='box-detail-post-Commentar-komen'>Commentar</div>
-                                </div> */}
-
                                 {renderComment()}
                             </div>
                             <div className="box-detail-post-footer">
@@ -97,7 +162,13 @@ function KomentarHomeDetail () {
                                 <div className='icon-card d-flex justify-content-between '>
                                     <div className='d-flex ' style={{width : "120px"}}>
                                         <span className='icon-card-heart ms-1'>
-                                            <img src={heart} alt="" />
+                                            {/* ternary option jika hearth dan like bertambah */}
+                                            {
+                                                changeHeart ?
+                                                <img src={heartMerah} alt="" onClick={btnLike}/>
+                                                :
+                                                <img src={heart} alt="" onClick={btnLike}/>
+                                            }
                                         </span>
                                         <span className='icon-card-chat'>
                                             <img src={chat} alt="" />
@@ -112,7 +183,7 @@ function KomentarHomeDetail () {
                                 </div>
                                 <div className="box-detail-post-footer-suka ms-2">
                                     <div>Di sukai oleh <span>amalia</span> dan <span>102 lainnya</span></div>
-                                    <div>{postDetail.createddate}</div>
+                                    <div>{postDetail.created_date}</div>
                                 </div>
                                 <div className="container-inputan">
                                     <span>
@@ -123,8 +194,15 @@ function KomentarHomeDetail () {
                                     form='form-control' 
                                     className='inputanx rounded ms-5 my-2' 
                                     placeholder='comment here' 
+                                    onChange={(e) => inputHandler(e , "komentar")} 
+                                    value={isiKomen}
                                     /> 
-                                    <button>post</button>
+                                    {
+                                        isDisable?
+                                        <button disabled={isDisable} className="disable">post</button>
+                                        :
+                                        <button disabled={isDisable} onClick={btnPostKomen}>post</button>
+                                    }
                                 </div>
                             </div>
                         </div>

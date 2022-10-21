@@ -3,7 +3,7 @@ import Axios  from "axios";
 import {API_URL} from '../../constants/API'
 import customer from "../../assets/image/iconsAllice/customer.png"
 import axios from "axios";
-import { Navigate, useNavigate } from "react-router-dom";
+import { Navigate, useNavigate ,} from "react-router-dom";
 
 export const createAccountGlobal = (values, setSubmitting) => {
     return async function (dispatch) {
@@ -29,15 +29,15 @@ export const createAccountGlobal = (values, setSubmitting) => {
                         payload : result.data
                     })
                     alert("Berhasil mendaftarkan user")
+                    alert("Check Your Email Verification")
                 })
                 .catch((err) => {
                     alert(err)
                 })
-                Navigate('/authentication')
             } else {
-                alert("password tidak singkron")
+                alert("kata sandi tidak sesuai, cek kembali kata sandi")
             }
-
+            
             setSubmitting(false)
         } catch (error){
             alert(error)
@@ -64,6 +64,7 @@ export const loginUser = ({user_email, password}) => {
                     // console.log(result.data[0]);
 
                     localStorage.setItem("UserDataAllice", JSON.stringify(result.data.dataLogin))
+                    console.log("test");
                     dispatch({
                         type : "USER_LOGIN",
                         payload :result.data.dataLogin
@@ -95,15 +96,14 @@ export const logoutUser = () => {
     return {
         type : "USER_LOGOUT",
     }
-    Navigate('/login')
 }
 
 export const userKeepLogin = (userData) => {
-    console.log(userData);
+    // console.log(userData.id);
     return (dispatch) => {
         Axios.get(`${API_URL}/users/userKeepLogin`, {
             params: {
-                idusers: userData.idusers
+                id: userData.id
             }
         })
         .then((result) => {

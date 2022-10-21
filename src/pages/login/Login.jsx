@@ -41,7 +41,7 @@ class Login extends Component {
 
     render(){
         // setelah login akan masuk ke home page dan tidak bisa kembali ke login page
-        if (this.props.userGlobal.idusers){
+        if (this.props.userGlobal.id){
             return <Navigate to="/home"/>
         }
         return(

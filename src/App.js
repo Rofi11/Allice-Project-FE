@@ -19,14 +19,14 @@ class App extends Component {
   // cek apakah sudah login apa belum
   componentDidMount() {
     const userLocalStorage = localStorage.getItem("UserDataAllice")
-    console.log(userLocalStorage);
+    // console.log(userLocalStorage);
 
     // pengkondisian jika tersimpan di local = true, maka jalankan keep login
     if(userLocalStorage != undefined){
       const userData = JSON.parse(userLocalStorage)
+      // console.log(userData);
       this.props.userKeepLogin(userData)
       // this.props.getPostData(userData.id)
-      // console.log(userData);
     } else {
       // ketika data nya null ini kunci agar masuk ke renderan
       this.props.checkStorage()

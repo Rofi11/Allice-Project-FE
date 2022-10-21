@@ -65,16 +65,17 @@
     width: 56px;
     height: 56px;
     /* border-radius: 50%; */
-    overflow: hidden;
+    /* overflow: hidden; */
     margin-right: 15px;
 }
 
-.info-profile .image img {
+/* .info-profile .image img {
     width: 56px;
     height: 56px;
 
 }
 
+*/
 .info-profile-name {
     font-size: 14px;
 }

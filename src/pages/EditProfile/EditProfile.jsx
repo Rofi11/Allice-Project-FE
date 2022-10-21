@@ -1,5 +1,5 @@
 import React from 'react';
-import { useState , useEffect } from 'react';
+import { useState , useEffect, useRef } from 'react';
 import { useDispatch, useSelector , connect } from 'react-redux';
 import MyNavbar from '../../components/MyNavbar';
 import "./EditProfile.css"
@@ -9,12 +9,15 @@ import { userKeepLogin } from '../../redux/actions/userAct';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import { Component } from 'react';
 import {Avatar} from '@chakra-ui/react'
+import { useNavigate } from 'react-router-dom';
 
 function EditProfile () {
-    const {username, fullname , bio, fotoProfile, idusers} = useSelector((state) => state.userReducer)
-    // console.log(idusers);
+    const {username, fullname , bio, fotoProfile, id,} = useSelector((state) => state.userReducer)
+    // console.log(id);
 
     const dispatch = useDispatch()
+
+    const nav = useNavigate()
 
     const [editUsername, setEditUsername] = useState(username)
     const [editFullname, setEditFullname] = useState(fullname)
@@ -22,7 +25,8 @@ function EditProfile () {
     const [editfotoProfile, setEditFotoProfile] = useState(fotoProfile)
     const [editfilename, setEditFileName] = useState("")
     const [edit, setEdit] = useState(0)
-    console.log(editfotoProfile);
+    const inputFileRef = useRef(null);
+    // console.log(editfotoProfile);
 
     function inputHandler (event, field) {
         const value = event.target.value
@@ -51,12 +55,27 @@ function EditProfile () {
     }
 
     function SaveBtnHandler () {
-        axios.patch(`${API_URL}/users/edit-profile/${idusers}`, {
-            username :editUsername,
-            fullname: editFullname,
-            bio :editBio,
-            fotoProfile : editfotoProfile
-        })
+        // kirim dalam bentuk form
+        const formData = new FormData()
+
+        // configurasi jika foto profile dari kosong
+        let foto
+        // split dulu foto nya
+        if (fotoProfile != null){
+            foto = fotoProfile.split("/")[4]
+        }
+
+
+        formData.append("fullname" , editFullname)
+        formData.append("username" , editUsername)
+        formData.append("image" , editfotoProfile) //foto baru
+        formData.append("bio", editBio)
+        formData.append("id", id)
+        if(fotoProfile != null){
+            formData.append("old_image", foto)
+        }
+
+        axios.patch(`${API_URL}/users/edit-profile/${id}`, formData)
         .then((result) => {
             alert("berhasil menambahkan data")
             // dispatch(userKeepLogin(idusers))
@@ -96,7 +115,7 @@ function EditProfile () {
                         </div>
                         <div>
                             <div className='section2-edit-fotoProfile-name'>{username}</div>
-                            <div className='section2-edit-fotoProfile-ubah'>Ubah Foto Profile</div>
+                            <div className='section2-edit-fotoProfile-ubah' onClick={() => inputFileRef.current.click()}>Ubah Foto Profile</div>
                         </div>
                     </div>
                     <div className='section2-edit-nama d-flex my-2'>
@@ -127,13 +146,15 @@ function EditProfile () {
                         />
                     </div>
                     <div className='section2-edit-bio d-flex my-2'>
-                        <label htmlFor="fotoProfile">Foto Profile</label>
+                        {/* input ini akan mneghilang karna di hubungkan oleh inputFileRef ke button ubah foto Profile */}
                         <input 
-                        defaultValue={fotoProfile}
+                        accept='image/png , image/jpg, image/jpeg'
                         type="file" 
                         className='form-control me-2' 
                         style={{height: "max-content"}}
                         onChange={(e) => BtnAddFile(e)} 
+                        ref={inputFileRef}
+                        hidden = "hidden"
                         />
                     </div>
                     <div className='d-flex justify-content-center'>
